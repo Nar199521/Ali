@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      MYSQL_HOST: "YOUR_CLOUD_PANEL_HOST"
+      MYSQL_USER: "YOUR_CLOUD_PANEL_USERNAME"
+      MYSQL_PASSWORD: "YOUR_CLOUD_PANEL_PASSWORD"
+      MYSQL_DATABASE: "YOUR_CLOUD_PANEL_DATABASE"
+      MYSQL_PORT: "3306" # Change if your port is different
