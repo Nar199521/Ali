@@ -1,0 +1,38 @@
+[
+  {
+    "userId": 4,
+    "companyName": "DG1995",
+    "registrationNumber": "17000250",
+    "address": "Inida",
+    "status": "rejected"
+  },
+  {
+    "userId": 5,
+    "companyName": "DGTal Access",
+    "registrationNumber": "19952103230126",
+    "address": "West Benagl",
+    "status": "rejected"
+  },
+  {
+    "userId": 4,
+    "companyName": "Digital",
+    "registrationNumber": "17000250",
+    "address": "West Benagl",
+    "status": "pending"
+  },
+  {
+    "userId": 1,
+    "companyName": "896552",
+    "registrationNumber": "365544",
+    "address": "West Benagl",
+    "status": "pending"
+  },
+  {
+    "id": 1,
+    "userId": 2,
+    "companyName": "De123",
+    "registrationNumber": "17000250",
+    "address": "Inida",
+    "status": "pending"
+  }
+]
