@@ -72,18 +72,19 @@ export async function POST(req: NextRequest) {
     }
 
     const user = JSON.parse(sessionCookie.value);
-    if (!user.isSeller && !user.isAdmin) {
+    if (!user.isAdmin && !user.isSeller) {
       return NextResponse.json(
         { error: 'Only sellers and admins can add products' },
         { status: 403 }
       );
     }
 
-    const { name, description, price, categoryId, imageUrls } = await req.json();
+    const { name, description, price, category, stock, imageUrl } = await req.json();
 
-    if (!name || !price || !categoryId) {
+    // Validate required fields
+    if (!name || price === undefined || !category) {
       return NextResponse.json(
-        { error: 'Missing required fields: name, price, categoryId' },
+        { error: 'Missing required fields: name, price, category' },
         { status: 400 }
       );
     }
@@ -92,22 +93,38 @@ export async function POST(req: NextRequest) {
     try {
       await conn.beginTransaction();
 
-      // Insert product
+      // First check if category exists, if not create it
+      const [categoryResult] = await conn.execute(
+        'SELECT id FROM categories WHERE name = ?',
+        [category]
+      );
+
+      let categoryId;
+      if ((categoryResult as any[]).length > 0) {
+        categoryId = (categoryResult as any[])[0].id;
+      } else {
+        // Create new category if it doesn't exist
+        const [newCategory] = await conn.execute(
+          'INSERT INTO categories (name) VALUES (?)',
+          [category]
+        );
+        categoryId = (newCategory as any).insertId;
+      }
+
+      // Insert product with image_url in products table
       const [result] = await conn.execute(
-        'INSERT INTO products (name, description, price, category_id, seller_id, stock_quantity) VALUES (?, ?, ?, ?, ?, ?)',
-        [name, description || '', price, categoryId, user.id || 1, 100]
+        'INSERT INTO products (name, description, price, category_id, seller_id, stock_quantity, image_url) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [name, description || '', parseFloat(price as string), categoryId, user.id || 1, parseInt(stock as string) || 0, imageUrl || '']
       );
 
       const productId = (result as any).insertId;
 
-      // Insert product images
-      if (imageUrls && Array.isArray(imageUrls)) {
-        for (const url of imageUrls) {
-          await conn.execute(
-            'INSERT INTO product_images (product_id, url) VALUES (?, ?)',
-            [productId, url]
-          );
-        }
+      // Also insert into product_images if imageUrl is provided
+      if (imageUrl) {
+        await conn.execute(
+          'INSERT INTO product_images (product_id, url) VALUES (?, ?)',
+          [productId, imageUrl]
+        );
       }
 
       await conn.commit();
