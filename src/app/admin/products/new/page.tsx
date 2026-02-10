@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { uploadToCloudinary } from '@/lib/cloudinary';
+import { uploadFile } from '@/lib/upload';
 
 export default function NewProductPage() {
     const router = useRouter();
@@ -30,8 +30,7 @@ export default function NewProductPage() {
             let imageUrl = '';
             // Step 1: Upload image if one is selected
             if (imageFile) {
-                // Using 'products' as the upload preset for Cloudinary
-                imageUrl = await uploadToCloudinary(imageFile, 'products');
+                imageUrl = await uploadFile(imageFile);
             }
 
             // Step 2: Gather form data

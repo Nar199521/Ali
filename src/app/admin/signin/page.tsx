@@ -4,7 +4,7 @@ import { LoginForm } from '@/components/forms/login-form';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -34,38 +34,21 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Login to your account
+            Admin Sign in
           </h1>
           <p className="text-sm text-muted-foreground">
-            Enter your email and password below to login
+            Sign in with your admin credentials to access the dashboard
           </p>
         </div>
         <LoginForm />
         <p className="px-8 text-center text-sm text-muted-foreground">
-          Don't have an account?{' '}
+          Back to site?{' '}
           <Link
-            href="/signup"
+            href="/"
             className="underline underline-offset-4 hover:text-primary"
           >
-            Sign up
+            Home
           </Link>
-        </p>
-        <p className="px-8 text-center text-sm text-muted-foreground">
-          By clicking continue, you agree to our{' '}
-          <Link
-            href="/terms"
-            className="underline underline-offset-4 hover:text-primary"
-          >
-            Terms of Service
-          </Link>{' '}
-          and{' '}
-          <Link
-            href="/privacy"
-            className="underline underline-offset-4 hover:text-primary"
-          >
-            Privacy Policy
-          </Link>
-          .
         </p>
       </div>
     </div>

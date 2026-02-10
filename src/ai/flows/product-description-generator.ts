@@ -9,7 +9,7 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {z} from 'zod';
 
 const ProductDescriptionInputSchema = z.object({
   title: z.string().describe('The title of the product.'),

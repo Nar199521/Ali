@@ -18,8 +18,8 @@ export async function GET(req: NextRequest) {
         params.push(categoryId);
       }
 
-      query += ' LIMIT ? OFFSET ?';
-      params.push(limit, offset);
+      // LIMIT and OFFSET cannot use placeholders in MySQL, so concatenate directly
+      query += ` LIMIT ${Math.max(0, limit)} OFFSET ${Math.max(0, offset)}`;
 
       const [rows] = await conn.execute(query, params);
 

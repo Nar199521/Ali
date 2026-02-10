@@ -18,6 +18,7 @@ import { Icons } from '@/components/icons';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { SocialLogins } from '@/components/social-logins';
+import { useState, useEffect } from 'react';
 
 const formSchema = z.object({
   email: z.string().email({
@@ -27,6 +28,7 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
+  const [isClient, setIsClient] = useState(false);
   const { signIn, isUserLoading } = useAppContext();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -36,6 +38,10 @@ export function LoginForm() {
       password: '',
     },
   });
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const user = await signIn(values.email, values.password);
@@ -48,6 +54,17 @@ export function LoginForm() {
         router.push('/');
       }
     }
+  }
+
+  // Defer rendering until client-side to avoid Radix UI ID hydration issues
+  if (!isClient) {
+    return (
+      <div className="grid gap-4">
+        <div className="h-10 bg-muted rounded animate-pulse" />
+        <div className="h-10 bg-muted rounded animate-pulse" />
+        <div className="h-10 bg-muted rounded animate-pulse" />
+      </div>
+    );
   }
 
   return (

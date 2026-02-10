@@ -12,7 +12,7 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {z} from 'zod';
 
 const AiPoweredSearchSummarizerInputSchema = z.object({
   query: z.string().describe('The search query to summarize.'),

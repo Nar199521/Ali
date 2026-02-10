@@ -1,11 +1,33 @@
-es needed
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL UNIQUE,
+  name VARCHAR(255),
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  role VARCHAR(50) NOT NULL DEFAULT 'user',
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  reset_token VARCHAR(255),
+  reset_expires DATETIME,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+-- Admins table (separate from regular users). Stores administrator accounts.
+CREATE TABLE IF NOT EXISTS admins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  name VARCHAR(255),
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Create default admin account (password: Admin@2026)
+INSERT INTO admins (username, name, email, password, is_active, created_at)
+VALUES ('admin', 'Admin', 'admin@example.com', '$2a$10$P1oa7WgJAMYT8BJcnKo2qO.4emM5Dm9YOGmKaXYqZEXIHbnClXqiC', TRUE, CURRENT_TIMESTAMP)
+ON DUPLICATE KEY UPDATE password=VALUES(password), is_active=VALUES(is_active);
 
 CREATE TABLE IF NOT EXISTS sellers (
   id INT AUTO_INCREMENT PRIMARY KEY,

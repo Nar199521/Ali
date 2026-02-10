@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { uploadToCloudinary } from '@/lib/cloudinary'; // Assuming you have this helper
+import { uploadFile } from '@/lib/upload';
 
 export default function SettingsPage() {
     const [bannerTitle, setBannerTitle] = useState('');
@@ -50,7 +50,7 @@ export default function SettingsPage() {
 
             // If a new image file is selected, upload it
             if (bannerImage) {
-                finalImageUrl = await uploadToCloudinary(bannerImage, 'site-assets');
+                finalImageUrl = await uploadFile(bannerImage);
             }
 
             // Save the settings via the API

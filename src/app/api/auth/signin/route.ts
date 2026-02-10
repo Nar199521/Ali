@@ -12,8 +12,17 @@ export async function POST(req: NextRequest) {
 
     const conn = await pool.getConnection();
     try {
-      const [rows] = await conn.execute('SELECT * FROM users WHERE email = ?', [email]);
-      const user = (rows as any[])[0];
+      // Try regular users first
+      const [userRows] = await conn.execute('SELECT * FROM users WHERE email = ?', [email]);
+      let user = (userRows as any[])[0];
+
+      // If not found in users, try admins table
+      let isAdminAccount = false;
+      if (!user) {
+        const [adminRows] = await conn.execute('SELECT * FROM admins WHERE email = ?', [email]);
+        user = (adminRows as any[])[0];
+        if (user) isAdminAccount = true;
+      }
 
       if (!user) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -24,14 +33,14 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
       }
 
-      // Create user session object (exclude password)
+      // Create session object (exclude password)
       const sessionUser = {
         id: user.id,
-        username: user.username,
+        username: user.username || user.name || null,
         email: user.email,
-        role: user.role || 'user',
-        isSeller: user.role === 'seller',
-        isAdmin: user.role === 'admin',
+        role: isAdminAccount ? 'admin' : (user.role || 'user'),
+        isSeller: (user.role === 'seller'),
+        isAdmin: isAdminAccount || user.role === 'admin',
       };
 
       // Set session cookie
