@@ -17,15 +17,15 @@ export function ProductCard({ product }: { product: ProductLike }) {
     const categoryId = product.categoryId || product.category || '';
 
     return (
-        <Card className="overflow-hidden flex flex-col">
-            <CardHeader className="p-0">
-                <div className="aspect-square relative">
+        <Card className="overflow-hidden flex flex-col h-full transition-shadow duration-300 hover:shadow-lg">
+            <CardHeader className="p-0 overflow-hidden">
+                <div className="aspect-square relative bg-gray-100">
                     {imageSrc ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
                             src={imageSrc}
                             alt={product.name}
-                            className="object-cover w-full h-full"
+                            className="object-cover w-full h-full transition-transform duration-300 ease-out hover:scale-110"
                         />
                     ) : (
                         <div className="w-full h-full bg-gray-100 flex items-center justify-center">
@@ -34,23 +34,29 @@ export function ProductCard({ product }: { product: ProductLike }) {
                     )}
                 </div>
             </CardHeader>
-            <CardContent className="p-4 flex-grow">
-                <h3 className="text-lg font-semibold truncate">{product.name}</h3>
-                <p className="text-sm text-muted-foreground mt-1 truncate">{product.description || ''}</p>
+            <CardContent className="p-4 flex-grow flex flex-col justify-between min-h-[100px]">
+                <div>
+                    <h3 className="text-base font-semibold line-clamp-2 h-14">{product.name}</h3>
+                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2 h-8">{product.description || ''}</p>
+                </div>
             </CardContent>
-            <CardFooter className="p-4 flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                    <Badge variant="outline">{product.category || product.store?.name || ''}</Badge>
-                    <span className="font-semibold text-lg">
+            <CardFooter className="p-4 flex flex-col gap-3 border-t">
+                <div className="flex items-center justify-between w-full">
+                    <Badge variant="outline" className="text-xs">{product.category || product.store?.name || ''}</Badge>
+                    <span className="font-semibold text-base">
                         {formatPrice(product.price, country)}
                     </span>
                 </div>
-                <div className="flex gap-2">
-                    <Button variant="ghost" onClick={() => openPreview && openPreview(product)} className="flex-1">
+                <div className="flex gap-2 w-full">
+                    <Button 
+                        variant="ghost" 
+                        onClick={() => openPreview && openPreview(product)} 
+                        className="flex-1 text-sm h-9"
+                    >
                         See preview
                     </Button>
                     <Link href={`/category/${categoryId}`} className="flex-1">
-                        <Button variant="outline" className="w-full">See similar</Button>
+                        <Button variant="outline" className="w-full text-sm h-9">See similar</Button>
                     </Link>
                 </div>
             </CardFooter>
