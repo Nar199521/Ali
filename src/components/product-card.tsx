@@ -18,7 +18,7 @@ export function ProductCard({ product }: { product: ProductLike }) {
 
     return (
         <Card className="overflow-hidden flex flex-col h-full transition-shadow duration-300 hover:shadow-lg">
-            <CardHeader className="p-0 overflow-hidden">
+            <CardHeader className="p-0 overflow-hidden flex-1">
                 <div className="aspect-square relative bg-gray-100">
                     {imageSrc ? (
                         // eslint-disable-next-line @next/next/no-img-element
@@ -29,34 +29,31 @@ export function ProductCard({ product }: { product: ProductLike }) {
                         />
                     ) : (
                         <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                            <span className="text-sm text-gray-500">No Image</span>
+                            <span className="text-xs text-gray-500">No Image</span>
                         </div>
                     )}
                 </div>
             </CardHeader>
-            <CardContent className="p-4 flex-grow flex flex-col justify-between min-h-[100px]">
-                <div>
-                    <h3 className="text-base font-semibold line-clamp-2 h-14">{product.name}</h3>
-                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2 h-8">{product.description || ''}</p>
-                </div>
+            <CardContent className="p-3 flex flex-col justify-start">
+                <h3 className="text-sm font-semibold line-clamp-2 h-10">{product.name}</h3>
             </CardContent>
-            <CardFooter className="p-4 flex flex-col gap-3 border-t">
+            <CardFooter className="p-3 flex flex-col gap-2 border-t">
                 <div className="flex items-center justify-between w-full">
-                    <Badge variant="outline" className="text-xs">{product.category || product.store?.name || ''}</Badge>
-                    <span className="font-semibold text-base">
+                    <Badge variant="outline" className="text-xs py-0">{product.category || product.store?.name || ''}</Badge>
+                    <span className="font-bold text-sm">
                         {formatPrice(product.price, country)}
                     </span>
                 </div>
-                <div className="flex gap-2 w-full">
+                <div className="flex gap-1 w-full">
                     <Button 
                         variant="ghost" 
                         onClick={() => openPreview && openPreview(product)} 
-                        className="flex-1 text-sm h-9"
+                        className="flex-1 text-xs h-8 py-1"
                     >
                         See preview
                     </Button>
                     <Link href={`/category/${categoryId}`} className="flex-1">
-                        <Button variant="outline" className="w-full text-sm h-9">See similar</Button>
+                        <Button variant="outline" className="w-full text-xs h-8 py-1">See similar</Button>
                     </Link>
                 </div>
             </CardFooter>
